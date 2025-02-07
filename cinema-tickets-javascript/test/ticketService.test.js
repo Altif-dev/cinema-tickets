@@ -13,12 +13,17 @@ describe('Ticket service tests', () => {
         };
     });
 
+    let ticketService;
+    beforeEach(() => {
+        ticketService = new TicketService();
+    })
+
     it('should make a call to the payment service', () => {
-        //arrange
+
         const ticketService = new TicketService();
-        //act
+
         ticketService.purchaseTickets(1, [new TicketTypeRequest('ADULT', 1)]);
-        //assert
+
         expect(makePaymentMock).toHaveBeenCalled();
 
     });
@@ -26,15 +31,12 @@ describe('Ticket service tests', () => {
     it.each([[11, 1, 25],[34, 2, 50 ]])('should make a call to the payment service with the correct ticket price for a single ticket',
         (accountId, noOfTickets, expectedCost) => {
 
-        const ticketService = new TicketService();
-
         ticketService.purchaseTickets(accountId, [new TicketTypeRequest('ADULT', noOfTickets)]);
 
         expect(makePaymentMock).toHaveBeenCalledWith(accountId, expectedCost);
     });
 
     it('should calculate correct ticket price for multiple ticket types in a single transaction', () => {
-        const ticketService = new TicketService();
 
         const ticketRequest = [
             new TicketTypeRequest('ADULT', 2),
@@ -46,4 +48,5 @@ describe('Ticket service tests', () => {
 
         expect(makePaymentMock).toHaveBeenCalledWith(15, 95);
     });
+    // TODO more test cases for the above test
 });
