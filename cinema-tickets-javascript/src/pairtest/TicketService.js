@@ -1,5 +1,5 @@
-import TicketTypeRequest from './lib/TicketTypeRequest.js';
 import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
+import TicketPaymentService from "../thirdparty/paymentgateway/TicketPaymentService.js";
 
 export default class TicketService {
   /**
@@ -7,6 +7,8 @@ export default class TicketService {
    */
 
   purchaseTickets(accountId, ...ticketTypeRequests) {
-    // throws InvalidPurchaseException
+    const paymentService = new TicketPaymentService();
+
+    paymentService.makePayment();
   }
 }
