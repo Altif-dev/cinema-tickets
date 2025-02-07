@@ -14,6 +14,6 @@ export default class TicketService {
   }
 
   calculatePrice(ticketTypeRequests) {
-    return ticketTypeRequests[0].getNoOfTickets() * 20;
+    return ticketTypeRequests[0].getNoOfTickets() * 25;
   }
 }
