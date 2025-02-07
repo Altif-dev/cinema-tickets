@@ -7,8 +7,13 @@ export default class TicketService {
    */
 
   purchaseTickets(accountId, ...ticketTypeRequests) {
+    const ticketTypeRequestObj = ticketTypeRequests[0];
     const paymentService = new TicketPaymentService();
 
-    paymentService.makePayment(11, 20);
+    paymentService.makePayment(accountId, this.calculatePrice(ticketTypeRequestObj));
+  }
+
+  calculatePrice(ticketTypeRequests) {
+    return ticketTypeRequests[0].getNoOfTickets() * 20;
   }
 }
