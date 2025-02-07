@@ -11,16 +11,28 @@ export default class TicketService {
     'ADULT' : 25 ,
   };
 
+
+  /**
+   * Calls the payment service
+   * @param {number} accountId - accountId for the account that is making the purchase
+   * @param {array} ticketTypeRequests - Requested tickets as an array of ticketType request objects
+   */
   purchaseTickets(accountId, ...ticketTypeRequests) {
     const ticketTypeRequestObj = ticketTypeRequests[0];
     const paymentService = new TicketPaymentService();
 
-    paymentService.makePayment(accountId, this.#calculatePrice(ticketTypeRequestObj));
+    paymentService.makePayment(accountId, this.#calculateTotalPrice(ticketTypeRequestObj));
   }
 
-  #calculatePrice(ticketTypeRequests) {
+  /**
+   * Calculates total price for a given set of ticket type requests
+   * @param {array} ticketTypeRequests - Array of ticketTypeRequest objects
+   * @returns {number} totalPrice
+   */
+  #calculateTotalPrice(ticketTypeRequests) {
 
     let totalPrice = 0;
+
     ticketTypeRequests.forEach(ticket => {
       totalPrice += ticket.getNoOfTickets() * this.TICKET_PRICES[ticket.getTicketType()];
     })
