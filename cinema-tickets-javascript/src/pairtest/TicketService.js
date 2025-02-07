@@ -15,10 +15,10 @@ export default class TicketService {
     const ticketTypeRequestObj = ticketTypeRequests[0];
     const paymentService = new TicketPaymentService();
 
-    paymentService.makePayment(accountId, this.calculatePrice(ticketTypeRequestObj));
+    paymentService.makePayment(accountId, this.#calculatePrice(ticketTypeRequestObj));
   }
 
-  calculatePrice(ticketTypeRequests) {
+  #calculatePrice(ticketTypeRequests) {
 
     let totalPrice = 0;
     ticketTypeRequests.forEach(ticket => {
