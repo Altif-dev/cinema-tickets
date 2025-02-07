@@ -9,6 +9,6 @@ export default class TicketService {
   purchaseTickets(accountId, ...ticketTypeRequests) {
     const paymentService = new TicketPaymentService();
 
-    paymentService.makePayment();
+    paymentService.makePayment(11, 20);
   }
 }
