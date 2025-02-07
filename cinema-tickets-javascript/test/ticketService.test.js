@@ -23,11 +23,12 @@ describe('Ticket service tests', () => {
 
     });
 
-    it('should make a call to the payment service with the correct ticket price for a single ticket', () => {
+    it.each([[11, 1, 20],[34, 2, 40 ]])('should make a call to the payment service with the correct ticket price for a single ticket',
+        (acountId , noOfTickets, expectedCost) => {
         const ticketService = new TicketService();
 
-        ticketService.purchaseTickets(11, [new TicketTypeRequest('ADULT', 1)]);
+        ticketService.purchaseTickets(acountId, [new TicketTypeRequest('ADULT', noOfTickets)]);
 
-        expect(makePaymentMock).toHaveBeenCalledWith(11, 20);
+        expect(makePaymentMock).toHaveBeenCalledWith(acountId, expectedCost);
     })
 });
