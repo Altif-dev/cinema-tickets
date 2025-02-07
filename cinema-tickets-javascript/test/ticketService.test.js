@@ -32,4 +32,18 @@ describe('Ticket service tests', () => {
 
         expect(makePaymentMock).toHaveBeenCalledWith(accountId, expectedCost);
     });
+
+    it('should calculate correct ticket price for multiple ticket types in a single transaction', () => {
+        const ticketService = new TicketService();
+
+        const ticketRequest = [
+            new TicketTypeRequest('ADULT', 2),
+            new TicketTypeRequest('CHILD', 3),
+            new TicketTypeRequest('INFANT', 1)
+        ];
+
+        ticketService.purchaseTickets(15, ticketRequest);
+
+        expect(makePaymentMock).toHaveBeenCalledWith(15, 95);
+    });
 });
