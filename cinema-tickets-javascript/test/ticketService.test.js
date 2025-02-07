@@ -22,4 +22,12 @@ describe('Ticket service tests', () => {
         expect(makePaymentMock).toHaveBeenCalled();
 
     });
+
+    it('should make a call to the payment service with the correct ticket price for a single ticket', () => {
+        const ticketService = new TicketService();
+
+        ticketService.purchaseTickets(11, [new TicketTypeRequest('ADULT', 1)]);
+
+        expect(makePaymentMock).toHaveBeenCalledWith(11, 20);
+    })
 });
