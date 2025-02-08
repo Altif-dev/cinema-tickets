@@ -36,7 +36,7 @@ export default class TicketService {
    */
   #calculateTotalPrice(ticketTypeRequests) {
     return ticketTypeRequests.reduce((currentValue, ticket) =>
-        currentValue + parseInt(ticket.getNoOfTickets()) * this.TICKET_PRICES[ticket.getTicketType()] , 0);
+        currentValue + ticket.getNoOfTickets() * this.TICKET_PRICES[ticket.getTicketType()] , 0);
   }
 
   /**
