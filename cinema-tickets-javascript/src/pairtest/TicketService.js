@@ -51,15 +51,10 @@ export default class TicketService {
       throw new RangeError('You can only purchase between 1 and 25 tickets per transaction');
     }
 
-    const ticketTypesRequested = [];
+    const checkIfAdultTicket = ticket => ticket.getTicketType() === 'ADULT';
 
-    ticketTypeRequestObj.forEach((ticket) => {
-      ticketTypesRequested.push(ticket.getTicketType());
-    });
-
-    if (!ticketTypesRequested.includes('ADULT')) {
+    if (!ticketTypeRequestObj.some(checkIfAdultTicket)) {
       throw new Error('An adult ticket must purchased with a child or infant ticket');
     }
-
   }
 }
