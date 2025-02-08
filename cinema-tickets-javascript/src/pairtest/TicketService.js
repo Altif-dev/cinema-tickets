@@ -46,10 +46,8 @@ export default class TicketService {
    * @param ticketTypeRequestObj
    */
   #validateTicketRequest(ticketTypeRequestObj) {
-    let totalNoOfTicketsRequested = 0;
-    ticketTypeRequestObj.forEach(ticket => {
-      totalNoOfTicketsRequested += ticket.getNoOfTickets();
-    })
+    const totalNoOfTicketsRequested = ticketTypeRequestObj.reduce((currentValue, ticket) =>
+        currentValue + parseInt(ticket.getNoOfTickets()), 0);
 
     if (totalNoOfTicketsRequested > 25 ) {
       throw new InvalidPurchaseException('You can only purchase between 1 and 25 tickets per transaction')
