@@ -2,6 +2,7 @@ import TicketService from "../src/pairtest/TicketService.js";
 import TicketTypeRequest from "../src/pairtest/lib/TicketTypeRequest.js";
 
 import TicketPaymentService from "../src/thirdparty/paymentgateway/TicketPaymentService.js";
+import InvalidPurchaseException from "../src/pairtest/lib/InvalidPurchaseException.js";
 jest.mock('../src/thirdparty/paymentgateway/TicketPaymentService.js');
 
 describe('Ticket service tests', () => {
@@ -56,5 +57,17 @@ describe('Ticket service tests', () => {
         ticketService.purchaseTickets(accountId, ticketRequest);
 
         expect(makePaymentMock).toHaveBeenCalledWith(accountId, expected);
+    });
+
+    it('should throw an error if more than 25 tickets are requested', () => {
+        const ticketRequest = [
+            new TicketTypeRequest('CHILD', 16),
+            new TicketTypeRequest('ADULT', 4),
+            new TicketTypeRequest('INFANT', 6),
+        ];
+        expect(() => {
+            ticketService.purchaseTickets(1 ,ticketRequest)
+        }).toThrow(new InvalidPurchaseException('You can only purchase between 1 and 25 tickets per transaction'));
+
     });
 });
