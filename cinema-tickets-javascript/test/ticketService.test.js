@@ -61,7 +61,7 @@ describe('Ticket service tests', () => {
                 expect(makePaymentMock).toHaveBeenCalledWith(accountId, expected);
             });
     });
-    
+
     describe('Validation tests', () => {
         it('should throw an error if more than 25 tickets are requested', () => {
             const ticketRequest = [
@@ -82,6 +82,15 @@ describe('Ticket service tests', () => {
             expect(() => {
                 ticketService.purchaseTickets(3, ticketRequest)
             }).toThrow(new InvalidPurchaseException('Error: An adult ticket must purchased with a child or infant ticket'));
+        });
+
+        it('should throw an error if the accountId is less than 1', () => {
+            const ticketRequest = [
+                new TicketTypeRequest('ADULT', 1),
+            ];
+            expect(() => {
+                ticketService.purchaseTickets(0, ticketRequest)
+            }).toThrow(new InvalidPurchaseException('RangeError: AccountId cannot be less than 1'));
         });
     });
 });
