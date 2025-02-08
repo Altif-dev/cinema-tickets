@@ -19,6 +19,16 @@ export default class TicketService {
    */
   purchaseTickets(accountId, ...ticketTypeRequests) {
     const ticketTypeRequestObj = ticketTypeRequests[0];
+
+    let totalNoOfTicketsRequested = 0;
+    ticketTypeRequestObj.forEach(ticket => {
+      totalNoOfTicketsRequested += ticket.getNoOfTickets();
+    })
+
+    if (totalNoOfTicketsRequested > 25 ) {
+      throw new InvalidPurchaseException('You can only purchase between 1 and 25 tickets per transaction')
+    }
+
     const paymentService = new TicketPaymentService();
 
     paymentService.makePayment(accountId, this.#calculateTotalPrice(ticketTypeRequestObj));
