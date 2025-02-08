@@ -67,7 +67,7 @@ describe('Ticket service tests', () => {
         ];
         expect(() => {
             ticketService.purchaseTickets(1 ,ticketRequest)
-        }).toThrow(new InvalidPurchaseException('You can only purchase between 1 and 25 tickets per transaction'));
+        }).toThrow(new InvalidPurchaseException('RangeError: You can only purchase between 1 and 25 tickets per transaction'));
 
     });
 });

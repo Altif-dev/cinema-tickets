@@ -19,11 +19,15 @@ export default class TicketService {
    */
   purchaseTickets(accountId, ...ticketTypeRequests) {
     const ticketTypeRequestObj = ticketTypeRequests[0];
+    try {
+      this.#validateTicketRequest(ticketTypeRequestObj);
 
-    this.#validateTicketRequest(ticketTypeRequestObj);
+      const paymentService = new TicketPaymentService();
+      paymentService.makePayment(accountId, this.#calculateTotalPrice(ticketTypeRequestObj));
+    } catch (error) {
+      throw new InvalidPurchaseException(error);
+    }
 
-    const paymentService = new TicketPaymentService();
-    paymentService.makePayment(accountId, this.#calculateTotalPrice(ticketTypeRequestObj));
   }
 
   /**
@@ -50,7 +54,7 @@ export default class TicketService {
         currentValue + parseInt(ticket.getNoOfTickets()), 0);
 
     if (totalNoOfTicketsRequested > 25 ) {
-      throw new InvalidPurchaseException('You can only purchase between 1 and 25 tickets per transaction')
+      throw new RangeError('You can only purchase between 1 and 25 tickets per transaction')
     }
   }
 }
