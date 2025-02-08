@@ -36,13 +36,8 @@ export default class TicketService {
    * @returns {number} totalPrice
    */
   #calculateTotalPrice(ticketTypeRequests) {
-
-    let totalPrice = 0;
-
-    ticketTypeRequests.forEach(ticket => {
-      totalPrice += ticket.getNoOfTickets() * this.TICKET_PRICES[ticket.getTicketType()];
-    })
-    return totalPrice;
+    return ticketTypeRequests.reduce((currentValue, ticket) =>
+        currentValue + parseInt(ticket.getNoOfTickets()) * this.TICKET_PRICES[ticket.getTicketType()] , 0);
   }
 
   /**
