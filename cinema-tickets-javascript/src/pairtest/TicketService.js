@@ -25,9 +25,8 @@ export default class TicketService {
       const paymentService = new TicketPaymentService();
       paymentService.makePayment(accountId, this.#calculateTotalPrice(ticketTypeRequestObj));
     } catch (error) {
-      throw new InvalidPurchaseException(error);
+      throw new InvalidPurchaseException(`${error.name}: ${error.message}`);
     }
-
   }
 
   /**
@@ -49,7 +48,18 @@ export default class TicketService {
         currentValue + parseInt(ticket.getNoOfTickets()), 0);
 
     if (totalNoOfTicketsRequested > 25 ) {
-      throw new RangeError('You can only purchase between 1 and 25 tickets per transaction')
+      throw new RangeError('You can only purchase between 1 and 25 tickets per transaction');
     }
+
+    const ticketTypesRequested = [];
+
+    ticketTypeRequestObj.forEach((ticket) => {
+      ticketTypesRequested.push(ticket.getTicketType());
+    });
+
+    if (!ticketTypesRequested.includes('ADULT')) {
+      throw new Error('An adult ticket must purchased with a child or infant ticket');
+    }
+
   }
 }
