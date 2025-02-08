@@ -11,7 +11,6 @@ export default class TicketService {
     'ADULT' : 25 ,
   };
 
-
   /**
    * Calls the payment service
    * @param {number} accountId - accountId for the account that is making the purchase
@@ -20,7 +19,7 @@ export default class TicketService {
   purchaseTickets(accountId, ...ticketTypeRequests) {
     const ticketTypeRequestObj = ticketTypeRequests[0];
     try {
-      this.#validateTicketRequest(ticketTypeRequestObj);
+      this.#validateTicketRequest(ticketTypeRequestObj, accountId);
 
       const paymentService = new TicketPaymentService();
       paymentService.makePayment(accountId, this.#calculateTotalPrice(ticketTypeRequestObj));
@@ -43,7 +42,7 @@ export default class TicketService {
    * Validates a given set of ticket type requests
    * @param {array} ticketTypeRequestObj
    */
-  #validateTicketRequest(ticketTypeRequestObj) {
+  #validateTicketRequest(ticketTypeRequestObj, accountId) {
     const totalNoOfTicketsRequested = ticketTypeRequestObj.reduce((currentValue, ticket) =>
         currentValue + parseInt(ticket.getNoOfTickets()), 0);
 
@@ -55,6 +54,10 @@ export default class TicketService {
 
     if (!ticketTypeRequestObj.some(checkIfAdultTicket)) {
       throw new Error('An adult ticket must purchased with a child or infant ticket');
+    }
+
+    if (accountId < 1) {
+      throw new RangeError('AccountId cannot be less than 1');
     }
   }
 }
