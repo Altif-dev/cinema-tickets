@@ -68,6 +68,15 @@ describe('Ticket service tests', () => {
         expect(() => {
             ticketService.purchaseTickets(1 ,ticketRequest)
         }).toThrow(new InvalidPurchaseException('RangeError: You can only purchase between 1 and 25 tickets per transaction'));
+    });
 
+    it('should throw an error if child or infant tickets are requested without an adult ticket', () => {
+        const ticketRequest = [
+            new TicketTypeRequest('CHILD', 2),
+            new TicketTypeRequest('INFANT', 1),
+        ];
+        expect(() => {
+            ticketService.purchaseTickets(3 ,ticketRequest)
+        }).toThrow(new InvalidPurchaseException('Error: An adult ticket must purchased with a child or infant ticket'));
     });
 });
