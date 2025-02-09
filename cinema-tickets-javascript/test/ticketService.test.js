@@ -97,17 +97,26 @@ describe('Ticket service tests', () => {
             expect(reserveSeatMock).toHaveBeenCalledWith(54, 3);
         });
 
-        it('should make a call to the seat reservation service with the correct number of seats required for all ticket without allocating a seat for infant ticket',
-            () => {
-                const ticketRequest = [
-                    new TicketTypeRequest('CHILD', 1),
-                    new TicketTypeRequest('ADULT', 2),
-                    new TicketTypeRequest('INFANT', 2),
-                ];
+        const ticketRequest1 = [
+            new TicketTypeRequest('CHILD', 1),
+            new TicketTypeRequest('ADULT', 2),
+            new TicketTypeRequest('INFANT', 2),
+        ];
 
-                ticketService.purchaseTickets(54, ticketRequest);
+        const ticketRequest2 = [
+            new TicketTypeRequest('CHILD', 1),
+            new TicketTypeRequest('ADULT', 2),
+            new TicketTypeRequest('INFANT', 2),
+            new TicketTypeRequest('CHILD', 1),
+        ];
 
-                expect(reserveSeatMock).toHaveBeenCalledWith(54, 3);
+        it.each([[ticketRequest1, 3, 54],[ticketRequest2, 4, 67]])
+        ('should make a call to the seat reservation service with the correct number of seats required for all ticket without allocating a seat for infant ticket',
+            (ticketRequest, expected, accountId) => {
+
+                ticketService.purchaseTickets(accountId, ticketRequest);
+
+                expect(reserveSeatMock).toHaveBeenCalledWith(accountId, expected);
             });
 
     });
