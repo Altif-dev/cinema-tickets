@@ -4,8 +4,10 @@ import TicketTypeRequest from "../src/pairtest/lib/TicketTypeRequest.js";
 import InvalidPurchaseException from "../src/pairtest/lib/InvalidPurchaseException.js";
 
 import TicketPaymentService from "../src/thirdparty/paymentgateway/TicketPaymentService.js";
+import SeatReservationService from "../src/thirdparty/seatbooking/SeatReservationService.js";
 
 jest.mock('../src/thirdparty/paymentgateway/TicketPaymentService.js');
+jest.mock('../src/thirdparty/seatbooking/SeatReservationService.js');
 
 describe('Ticket service tests', () => {
 
@@ -13,6 +15,13 @@ describe('Ticket service tests', () => {
     TicketPaymentService.mockImplementation(() => {
         return {
             makePayment: makePaymentMock,
+        };
+    });
+
+    const reserveSeatMock = jest.fn();
+    SeatReservationService.mockImplementation(() => {
+        return {
+            reserveSeat: reserveSeatMock,
         };
     });
 
@@ -62,6 +71,16 @@ describe('Ticket service tests', () => {
             });
     });
 
+    describe('calling seat reservation service with the correct number of seats', () => {
+        it('should call seat reservation service', () => {
+            const ticketService = new TicketService();
+
+            ticketService.purchaseTickets(1, [new TicketTypeRequest('ADULT', 1)]);
+
+            expect(reserveSeatMock).toHaveBeenCalled();
+        });
+    })
+
     describe('Validation tests', () => {
         it('should throw an error if more than 25 tickets are requested', () => {
             const ticketRequest = [
@@ -84,7 +103,7 @@ describe('Ticket service tests', () => {
             }).toThrow(new InvalidPurchaseException('Error: An adult ticket must purchased with a child or infant ticket'));
         });
 
-        it.each([[0],[-1],[-1000]])('should throw an error if the accountId is less than 1', (accountId) => {
+        it.each([[0], [-1], [-1000]])('should throw an error if the accountId is less than 1', (accountId) => {
             const ticketRequest = [
                 new TicketTypeRequest('ADULT', 1),
             ];
