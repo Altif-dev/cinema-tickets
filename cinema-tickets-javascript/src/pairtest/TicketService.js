@@ -26,7 +26,7 @@ export default class TicketService {
       paymentService.makePayment(accountId, this.#calculateTotalPrice(ticketTypeRequestObj));
 
       const seatReservationService = new SeatReservationService();
-      seatReservationService.reserveSeat(accountId, 2);
+      seatReservationService.reserveSeat(accountId, this.#calculateSeatsRequired(ticketTypeRequestObj));
 
     } catch (error) {
       throw new InvalidPurchaseException(`${error.name}: ${error.message}`);
@@ -41,6 +41,10 @@ export default class TicketService {
   #calculateTotalPrice(ticketTypeRequests) {
     return ticketTypeRequests.reduce((currentValue, ticket) =>
         currentValue + ticket.getNoOfTickets() * this.TICKET_PRICES[ticket.getTicketType()] , 0);
+  }
+
+  #calculateSeatsRequired(ticketTypeRequests) {
+    return ticketTypeRequests[0].getNoOfTickets()
   }
 
   /**
