@@ -95,9 +95,21 @@ describe('Ticket service tests', () => {
 
             ticketService.purchaseTickets(54, ticketRequest);
             expect(reserveSeatMock).toHaveBeenCalledWith(54, 3);
-
         });
-    })
+
+        it('should make a call to the seat reservation service with the correct number of seats required for all ticket without allocating a seat for infant ticket',
+            () => {
+            const ticketRequest = [
+                new TicketTypeRequest('CHILD', 1),
+                new TicketTypeRequest('ADULT', 2),
+                new TicketTypeRequest('INFANT', 2),
+            ];
+
+            ticketService.purchaseTickets(54, ticketRequest);
+            expect(reserveSeatMock).toHaveBeenCalledWith(54, 3);
+        });
+
+    });
 
     describe('Validation tests', () => {
         it('should throw an error if more than 25 tickets are requested', () => {
