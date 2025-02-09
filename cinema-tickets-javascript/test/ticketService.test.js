@@ -101,5 +101,15 @@ describe('Ticket service tests', () => {
                 ticketService.purchaseTickets(23, ticketRequest)
             }).toThrow(new InvalidPurchaseException('RangeError: number of tickets requested is less than 1'));
         });
+
+        it('should throw an error if number of tickets requested is less than 1 when multiple ticket types requested', () => {
+            const ticketRequest = [
+                new TicketTypeRequest('ADULT', -1),
+                new TicketTypeRequest('CHILD', 2),
+            ];
+            expect(() => {
+                ticketService.purchaseTickets(23, ticketRequest)
+            }).toThrow(new InvalidPurchaseException('RangeError: number of tickets requested is less than 1'));
+        });
     });
 });
