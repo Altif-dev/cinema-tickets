@@ -8,7 +8,7 @@ export default class TicketService {
   TICKET_PRICES = {
     'INFANT' : 0,
     'CHILD' : 15,
-    'ADULT' : 25 ,
+    'ADULT' : 25,
   };
 
   /**
@@ -49,6 +49,8 @@ export default class TicketService {
 
     if (totalNoOfTicketsRequested > 25 ) {
       throw new RangeError('You can only purchase between 1 and 25 tickets per transaction');
+    } else if (totalNoOfTicketsRequested < 1) {
+      throw new RangeError('number of tickets requested is less than 1');
     }
 
     const checkIfAdultTicket = ticket => ticket.getTicketType() === 'ADULT';
