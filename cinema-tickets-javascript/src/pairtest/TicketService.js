@@ -50,7 +50,7 @@ export default class TicketService {
    */
   #calculateSeatsRequired(ticketTypeRequests) {
     return ticketTypeRequests.reduce((currentValue, ticket) =>
-        currentValue + ticket.getNoOfTickets() , 0);
+        currentValue + (ticket.getTicketType() !== 'INFANT' ? ticket.getNoOfTickets() : 0) , 0);
   }
 
   /**
