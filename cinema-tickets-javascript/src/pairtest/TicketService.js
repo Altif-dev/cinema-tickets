@@ -41,6 +41,7 @@ export default class TicketService {
   /**
    * Validates a given set of ticket type requests
    * @param {array} ticketTypeRequestObj
+   * @param {number} accountId
    */
   #validateTicketRequest(ticketTypeRequestObj, accountId) {
     const totalNoOfTicketsRequested = ticketTypeRequestObj.reduce((currentValue, ticket) =>
