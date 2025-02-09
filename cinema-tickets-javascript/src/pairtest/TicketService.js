@@ -26,7 +26,7 @@ export default class TicketService {
       paymentService.makePayment(accountId, this.#calculateTotalPrice(ticketTypeRequestObj));
 
       const seatReservationService = new SeatReservationService();
-      seatReservationService.reserveSeat(accountId, 1);
+      seatReservationService.reserveSeat(accountId, 2);
 
     } catch (error) {
       throw new InvalidPurchaseException(`${error.name}: ${error.message}`);
