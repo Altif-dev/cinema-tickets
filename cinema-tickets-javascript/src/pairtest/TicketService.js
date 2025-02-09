@@ -43,6 +43,11 @@ export default class TicketService {
         currentValue + ticket.getNoOfTickets() * this.TICKET_PRICES[ticket.getTicketType()] , 0);
   }
 
+  /**
+   * Calculates seats required for a given set of ticket types requests
+   * @param {array} ticketTypeRequests - Array of ticketTypeRequest objects
+   * @returns {number} number of seats required
+   */
   #calculateSeatsRequired(ticketTypeRequests) {
     return ticketTypeRequests.reduce((currentValue, ticket) =>
         currentValue + ticket.getNoOfTickets() , 0);
