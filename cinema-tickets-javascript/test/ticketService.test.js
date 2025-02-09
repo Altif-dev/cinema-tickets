@@ -93,7 +93,7 @@ describe('Ticket service tests', () => {
             }).toThrow(new InvalidPurchaseException('RangeError: AccountId cannot be less than 1'));
         });
 
-        it('should throw an error if number of tickets requested is less than 1', () => {
+        it('should throw an error if number of tickets requested is less than 1 for a single ticket type', () => {
             const ticketRequest = [
                 new TicketTypeRequest('ADULT', -1),
             ];
