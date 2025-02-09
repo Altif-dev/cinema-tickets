@@ -1,5 +1,6 @@
 import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
 import TicketPaymentService from "../thirdparty/paymentgateway/TicketPaymentService.js";
+import SeatReservationService from "../thirdparty/seatbooking/SeatReservationService.js";
 
 export default class TicketService {
   /**
@@ -12,7 +13,7 @@ export default class TicketService {
   };
 
   /**
-   * Calls the payment service
+   * Calls the payment service and seat reservation service with correct price and seats to reserve
    * @param {number} accountId - accountId for the account that is making the purchase
    * @param {array} ticketTypeRequests - Requested tickets as an array of ticketType request objects
    */
@@ -23,6 +24,10 @@ export default class TicketService {
 
       const paymentService = new TicketPaymentService();
       paymentService.makePayment(accountId, this.#calculateTotalPrice(ticketTypeRequestObj));
+
+      const seatReservationService = new SeatReservationService();
+      seatReservationService.reserveSeat(accountId, 1);
+
     } catch (error) {
       throw new InvalidPurchaseException(`${error.name}: ${error.message}`);
     }
