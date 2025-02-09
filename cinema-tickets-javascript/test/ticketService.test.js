@@ -80,12 +80,13 @@ describe('Ticket service tests', () => {
             expect(reserveSeatMock).toHaveBeenCalled();
         });
 
-        it('should make a call to the seat reservation service with the correct number of seats required for a single ticket', () => {
+        it.each([[23, 2, 2],[13, 1, 1],[36, 3, 3]])('should make a call to the seat reservation service with the correct number of seats required for a single ticket type',
+            (accountId, noOfTickets, seatsRequired) => {
             const ticketService = new TicketService();
 
-            ticketService.purchaseTickets(23, [new TicketTypeRequest('ADULT', 2)]);
+            ticketService.purchaseTickets(accountId, [new TicketTypeRequest('ADULT', noOfTickets)]);
 
-            expect(reserveSeatMock).toHaveBeenCalledWith(23, 2);
+            expect(reserveSeatMock).toHaveBeenCalledWith(accountId, seatsRequired);
         });
     })
 
