@@ -79,6 +79,14 @@ describe('Ticket service tests', () => {
 
             expect(reserveSeatMock).toHaveBeenCalled();
         });
+
+        it('should make a call to the seat reservation service with the correct number of seats required for a single ticket', () => {
+            const ticketService = new TicketService();
+
+            ticketService.purchaseTickets(23, [new TicketTypeRequest('ADULT', 2)]);
+
+            expect(reserveSeatMock).toHaveBeenCalledWith(23, 2);
+        });
     })
 
     describe('Validation tests', () => {
