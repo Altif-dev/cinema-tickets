@@ -34,8 +34,6 @@ describe('Ticket service tests', () => {
     describe('Calling payment service with the correct price', () => {
         it('should make a call to the payment service', () => {
 
-            const ticketService = new TicketService();
-
             ticketService.purchaseTickets(1, [new TicketTypeRequest('ADULT', 1)]);
 
             expect(makePaymentMock).toHaveBeenCalled();
@@ -73,20 +71,31 @@ describe('Ticket service tests', () => {
 
     describe('calling seat reservation service with the correct number of seats', () => {
         it('should call seat reservation service', () => {
-            const ticketService = new TicketService();
 
             ticketService.purchaseTickets(1, [new TicketTypeRequest('ADULT', 1)]);
 
             expect(reserveSeatMock).toHaveBeenCalled();
         });
 
-        it.each([[23, 2, 2],[13, 1, 1],[36, 3, 3]])('should make a call to the seat reservation service with the correct number of seats required for a single ticket type',
+        it.each([[23, 2, 2],[13, 1, 1],[36, 3, 3]])
+        ('should make a call to the seat reservation service with the correct number of seats required for a single ticket type',
             (accountId, noOfTickets, seatsRequired) => {
-            const ticketService = new TicketService();
+
 
             ticketService.purchaseTickets(accountId, [new TicketTypeRequest('ADULT', noOfTickets)]);
 
             expect(reserveSeatMock).toHaveBeenCalledWith(accountId, seatsRequired);
+        });
+
+        it('should make a call to the seat reservation service with the correct number of seats required for child and adult ticket types', () => {
+            const ticketRequest = [
+                new TicketTypeRequest('CHILD', 1),
+                new TicketTypeRequest('ADULT', 2),
+            ];
+
+            ticketService.purchaseTickets(54, ticketRequest);
+            expect(reserveSeatMock).toHaveBeenCalledWith(54, 3);
+
         });
     })
 
