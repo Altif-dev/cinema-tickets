@@ -6,6 +6,7 @@ export default class TicketService {
   /**
    * Should only have private methods other than the one below.
    */
+
   TICKET_PRICES = {
     'INFANT' : 0,
     'CHILD' : 15,

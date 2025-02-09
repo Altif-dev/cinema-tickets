@@ -77,15 +77,14 @@ describe('Ticket service tests', () => {
             expect(reserveSeatMock).toHaveBeenCalled();
         });
 
-        it.each([[23, 2, 2],[13, 1, 1],[36, 3, 3]])
+        it.each([[23, 2, 2], [13, 1, 1], [36, 3, 3]])
         ('should make a call to the seat reservation service with the correct number of seats required for a single ticket type',
             (accountId, noOfTickets, seatsRequired) => {
 
+                ticketService.purchaseTickets(accountId, [new TicketTypeRequest('ADULT', noOfTickets)]);
 
-            ticketService.purchaseTickets(accountId, [new TicketTypeRequest('ADULT', noOfTickets)]);
-
-            expect(reserveSeatMock).toHaveBeenCalledWith(accountId, seatsRequired);
-        });
+                expect(reserveSeatMock).toHaveBeenCalledWith(accountId, seatsRequired);
+            });
 
         it('should make a call to the seat reservation service with the correct number of seats required for child and adult ticket types', () => {
             const ticketRequest = [
@@ -94,20 +93,22 @@ describe('Ticket service tests', () => {
             ];
 
             ticketService.purchaseTickets(54, ticketRequest);
+
             expect(reserveSeatMock).toHaveBeenCalledWith(54, 3);
         });
 
         it('should make a call to the seat reservation service with the correct number of seats required for all ticket without allocating a seat for infant ticket',
             () => {
-            const ticketRequest = [
-                new TicketTypeRequest('CHILD', 1),
-                new TicketTypeRequest('ADULT', 2),
-                new TicketTypeRequest('INFANT', 2),
-            ];
+                const ticketRequest = [
+                    new TicketTypeRequest('CHILD', 1),
+                    new TicketTypeRequest('ADULT', 2),
+                    new TicketTypeRequest('INFANT', 2),
+                ];
 
-            ticketService.purchaseTickets(54, ticketRequest);
-            expect(reserveSeatMock).toHaveBeenCalledWith(54, 3);
-        });
+                ticketService.purchaseTickets(54, ticketRequest);
+
+                expect(reserveSeatMock).toHaveBeenCalledWith(54, 3);
+            });
 
     });
 
@@ -118,6 +119,7 @@ describe('Ticket service tests', () => {
                 new TicketTypeRequest('ADULT', 4),
                 new TicketTypeRequest('INFANT', 6),
             ];
+
             expect(() => {
                 ticketService.purchaseTickets(1, ticketRequest)
             }).toThrow(new InvalidPurchaseException('RangeError: You can only purchase between 1 and 25 tickets per transaction'));
@@ -128,6 +130,7 @@ describe('Ticket service tests', () => {
                 new TicketTypeRequest('CHILD', 2),
                 new TicketTypeRequest('INFANT', 1),
             ];
+
             expect(() => {
                 ticketService.purchaseTickets(3, ticketRequest)
             }).toThrow(new InvalidPurchaseException('Error: An adult ticket must purchased with a child or infant ticket'));
@@ -137,6 +140,7 @@ describe('Ticket service tests', () => {
             const ticketRequest = [
                 new TicketTypeRequest('ADULT', 1),
             ];
+
             expect(() => {
                 ticketService.purchaseTickets(accountId, ticketRequest)
             }).toThrow(new InvalidPurchaseException('RangeError: AccountId cannot be less than 1'));
@@ -146,6 +150,7 @@ describe('Ticket service tests', () => {
             const ticketRequest = [
                 new TicketTypeRequest('ADULT', -1),
             ];
+
             expect(() => {
                 ticketService.purchaseTickets(23, ticketRequest)
             }).toThrow(new InvalidPurchaseException('RangeError: number of tickets requested is less than 1'));
@@ -156,6 +161,7 @@ describe('Ticket service tests', () => {
                 new TicketTypeRequest('ADULT', -1),
                 new TicketTypeRequest('CHILD', 2),
             ];
+
             expect(() => {
                 ticketService.purchaseTickets(23, ticketRequest)
             }).toThrow(new InvalidPurchaseException('RangeError: number of tickets requested is less than 1'));
