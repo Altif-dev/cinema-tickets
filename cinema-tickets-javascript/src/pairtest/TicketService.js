@@ -49,7 +49,11 @@ export default class TicketService {
 
     if (totalNoOfTicketsRequested > 25 ) {
       throw new RangeError('You can only purchase between 1 and 25 tickets per transaction');
-    } else if (totalNoOfTicketsRequested < 1) {
+    }
+
+    const isNoOfTicketsRequestedLessThan1 = ticket => ticket.getNoOfTickets() < 1;
+
+    if (ticketTypeRequestObj.some(isNoOfTicketsRequestedLessThan1)) {
       throw new RangeError('number of tickets requested is less than 1');
     }
 
