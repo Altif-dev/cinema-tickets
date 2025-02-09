@@ -84,12 +84,12 @@ describe('Ticket service tests', () => {
             }).toThrow(new InvalidPurchaseException('Error: An adult ticket must purchased with a child or infant ticket'));
         });
 
-        it('should throw an error if the accountId is less than 1', () => {
+        it.each([[0],[-1],[-1000]])('should throw an error if the accountId is less than 1', (accountId) => {
             const ticketRequest = [
                 new TicketTypeRequest('ADULT', 1),
             ];
             expect(() => {
-                ticketService.purchaseTickets(0, ticketRequest)
+                ticketService.purchaseTickets(accountId, ticketRequest)
             }).toThrow(new InvalidPurchaseException('RangeError: AccountId cannot be less than 1'));
         });
     });
