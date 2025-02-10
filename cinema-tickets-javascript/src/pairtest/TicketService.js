@@ -56,11 +56,11 @@ export default class TicketService {
 
   /**
    * Validates a given set of ticket type requests
-   * @param {array} ticketTypeRequestObj
+   * @param {array} ticketTypeRequests
    * @param {number} accountId
    */
-  #validateTicketRequest(ticketTypeRequestObj, accountId) {
-    const totalNoOfTicketsRequested = ticketTypeRequestObj.reduce((currentValue, ticket) =>
+  #validateTicketRequest(ticketTypeRequests, accountId) {
+    const totalNoOfTicketsRequested = ticketTypeRequests.reduce((currentValue, ticket) =>
         currentValue + parseInt(ticket.getNoOfTickets()), 0);
 
     if (totalNoOfTicketsRequested > 25 ) {
@@ -69,13 +69,13 @@ export default class TicketService {
 
     const isNoOfTicketsRequestedLessThan1 = ticket => ticket.getNoOfTickets() < 1;
 
-    if (ticketTypeRequestObj.some(isNoOfTicketsRequestedLessThan1)) {
+    if (ticketTypeRequests.some(isNoOfTicketsRequestedLessThan1)) {
       throw new RangeError('number of tickets requested is less than 1');
     }
 
-    const checkIfAdultTicket = ticket => ticket.getTicketType() === 'ADULT';
+    const isAdultTicket = ticket => ticket.getTicketType() === 'ADULT';
 
-    if (!ticketTypeRequestObj.some(checkIfAdultTicket)) {
+    if (!ticketTypeRequests.some(isAdultTicket)) {
       throw new Error('An adult ticket must purchased with a child or infant ticket');
     }
 
